@@ -1,0 +1,17 @@
+﻿  function.cpp
+D:\Lập trình\CS163\CS163-Group13\Mini Search Engine\Mini Search Engine\function.cpp(59,39): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+D:\Lập trình\CS163\CS163-Group13\Mini Search Engine\Mini Search Engine\function.cpp(68,38): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+D:\Lập trình\CS163\CS163-Group13\Mini Search Engine\Mini Search Engine\function.cpp(70,22): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
+D:\Lập trình\CS163\CS163-Group13\Mini Search Engine\Mini Search Engine\function.cpp(80,21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\Lập trình\CS163\CS163-Group13\Mini Search Engine\Mini Search Engine\function.cpp(156,40): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\Lập trình\CS163\CS163-Group13\Mini Search Engine\Mini Search Engine\function.cpp(167,41): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+D:\Lập trình\CS163\CS163-Group13\Mini Search Engine\Mini Search Engine\function.cpp(132,24): warning C4101: 'check': unreferenced local variable
+  Mini Search Engine.vcxproj -> D:\Lập trình\CS163\CS163-Group13\Mini Search Engine\x64\Debug\Mini Search Engine.exe
