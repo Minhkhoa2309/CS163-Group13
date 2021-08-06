@@ -147,7 +147,6 @@ void Load_data(Trie* pHead, string article[])
 			continue;
 		}
 		getline(fin2, line);
-		cout << line << endl;
 		article[i] = line;
 		linestart = 0;
 		word_vector = ParseStream(line, position_vector, linestart);
@@ -175,5 +174,23 @@ void Load_data(Trie* pHead, string article[])
 	}
 	fin1.close();
 }
+
+void IntitleQuery(vector<int>& res, Trie* word)
+{
+	if (word == NULL)
+		return;
+	vector<int> first = res;
+	vector<int> second, des;
+	second = word->title;
+	if (res.size() <= 0)
+	{
+		res = second;
+		return;
+	}
+	set_intersection(first.begin(), first.end(), second.begin(), second.end(),back_inserter(des));
+	res = des;
+}
+
+
 
 

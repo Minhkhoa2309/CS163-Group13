@@ -34,5 +34,6 @@ void destructor_History_Trie(History_Trie* root);
 void insert_word(Trie*& root, bool intitle, string s, int posinart, int article);
 vector<string> ParseStream(string& line, vector<int>& posinart, int& linestart);
 void Load_data(Trie* pHead, string article[]);
+void IntitleQuery(vector<int>& res, Trie* word);
 
 #endif
