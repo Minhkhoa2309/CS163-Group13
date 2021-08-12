@@ -191,6 +191,16 @@ void IntitleQuery(vector<int>& res, Trie* word)
 	res = des;
 }
 
-
+void AndQuery(vector<int>& res, Trie* word) {
+	if (word == NULL)
+		return;
+	vector<int> second, des;
+	size_t sz = word->position.size();
+	for (size_t i = 0; i < sz; i++) {
+		second.push_back(word->position[i].first);
+	}
+	set_intersection(res.begin(), res.end(), second.begin(), second.end(), back_inserter(des));
+	res = des;
+}
 
 
