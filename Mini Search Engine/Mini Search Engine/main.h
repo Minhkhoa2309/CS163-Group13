@@ -103,6 +103,9 @@ void AndQuery(vector<int>& res, Trie* word);
 Trie* KeyWord(Trie* root, string s);
 void queryOr(vector<int>& res, Trie* word);
 Trie* hashtag(Trie* root, string str);
+Trie* searchMoney(Trie* root, string s);
+vector<int> searchMoneyInRange(Trie* root, string s);
+vector<int> searchNumberInRange(Trie* root, string s);
 
 //History
 string History_suggestion(History_Trie* history_trie);

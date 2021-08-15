@@ -313,6 +313,199 @@ Trie* hashtag(Trie* root, string str) {
 	return current;
 }
 
+/****************************************************************/
+
+Trie* searchMoney(Trie* root, string s)
+{
+	Trie* cur = root;
+	int length = s.length();
+	int cnt = 1, tmp;
+	if (cur->pNext[37] != NULL)
+		cur = cur->pNext[37];
+	else
+		return NULL;
+	while (cnt < length) {
+		if ((int)(s[cnt] - '0') < 10 && (int)(s[cnt] - '0') >= 0)
+			tmp = (int)(s[cnt] - '0') + 26;
+		else {
+			return NULL;
+			continue;
+		}
+		if (cur->pNext[tmp] == NULL)return NULL;
+		cur = cur->pNext[tmp];
+		cnt++;
+	}
+	return cur;
+}
+
+/****************************************************************/
+
+vector<int> searchMoneyInRange(Trie* root, string s)
+{
+	//check if this is a mistake
+	vector<int> res;
+	Trie* cur = root;
+	if (cur->pNext[37] == NULL)
+		return res;
+	cur = cur->pNext[37];
+	//transform string to int
+	int intst = 0;
+	int l = s.length();
+	if (s[1] < '0' || s[1]>'9')return res;
+	int test = 2;
+	while (test < l)
+	{
+		if ((s[test] >= '0' && s[test] <= '9') || (s[test] == '.') || (s[test] == '$'))
+			test++;
+		else
+			return res;
+	}
+	int cnt = 1;
+	while (cnt < l)
+	{
+		intst *= 10;
+		intst += (s[cnt] - '0');
+		cnt++;
+		if (s[cnt] == '.')
+		{
+			cnt++;
+			break;
+		}
+	}
+	//search from intst to inte
+	if (s[cnt] != '.')
+		return res;
+	cnt++;
+	if (s[cnt] != '$')
+		return res;
+	cnt++;
+	int inte = 0;
+	while (cnt < l)
+	{
+		if (s[cnt] == '.' || s[cnt] == '$')
+			return res;
+		inte *= 10;
+		inte += (s[cnt] - '0');
+		cnt++;
+	}
+	if (intst > inte)return res;
+	int tmp = intst;
+	Trie* nxt;
+	string nxts;
+	int cnt2;
+	while (tmp <= inte)
+	{
+		nxts = "$";
+		test = tmp;
+		if (test == 0)cnt = 1;
+		else
+		{
+			cnt = 0;
+			while (test != 0)
+			{
+				cnt++;
+				test /= 10;
+			}
+		}
+		test = tmp;
+		intst = 0;
+		cnt2 = cnt;
+		while (cnt2 != 0)
+		{
+			intst *= 10;
+			intst += test % 10;
+			test /= 10;
+			cnt2--;
+		}
+		while (cnt != 0)
+		{
+			nxts += intst % 10 + '0';
+			intst /= 10;
+			cnt--;
+		}
+		nxt = searchMoney(root, nxts);
+		queryOr(res, nxt);
+		tmp++;
+	}
+	return res;
+}
+
+/****************************************************************/
+
+vector<int> searchNumberInRange(Trie* root, string s)
+{
+	//check if this is a mistake
+	int test;
+	vector<int> res;
+	int l = s.length();
+	int cnt = 0;
+	int intst = 0, inte = 0;
+	if (s[0] == '.')return res;
+	while (cnt < l)
+	{
+		intst *= 10;
+		intst += (int)(s[cnt] - '0');
+		cnt++;
+		if (s[cnt] == '.')
+		{
+			cnt++;
+			break;
+		}
+	}
+	if (s[cnt] != '.')
+		return res;
+	cnt++;
+	if (cnt >= l)return res;
+	while (cnt < l)
+	{
+		if (s[cnt] == '.')
+			return res;
+		inte *= 10;
+		inte += (int)(s[cnt] - '0');
+		cnt++;
+	}
+	if (intst > inte)return res;
+	int tmp = intst;
+	Trie* nxt;
+	string nxts;
+	int cnt2;
+	while (tmp <= inte)
+	{
+		nxts.clear();
+		test = tmp;
+		if (test == 0)cnt = 1;
+		else
+		{
+			cnt = 0;
+			while (test != 0)
+			{
+				cnt++;
+				test /= 10;
+			}
+		}
+		test = tmp;
+		intst = 0;
+		cnt2 = cnt;
+		while (cnt2 != 0)
+		{
+			intst *= 10;
+			intst += test % 10;
+			test /= 10;
+			cnt2--;
+		}
+		while (cnt != 0)
+		{
+			nxts += intst % 10 + '0';
+			intst /= 10;
+			cnt--;
+		}
+		nxt = KeyWord(root, nxts);
+		queryOr(res, nxt);
+		tmp++;
+	}
+	return res;
+}
+
 //-----------------------------------History Search -------------------------------------------------------
 vector<string> input(vector<string>& queryHistory, string& s)
 {
