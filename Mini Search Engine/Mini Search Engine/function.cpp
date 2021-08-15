@@ -191,6 +191,24 @@ void IntitleQuery(vector<int>& res, Trie* word)
 	res = des;
 }
 
+/////////////////////
+// OR QUERY SEARCH //
+/////////////////////
+
+void queryOr(vector<int>& res, Trie* word) {
+	if (word == NULL)
+		return;
+	
+	vector<int> second, destination;
+	size_t size = word->position.size();
+
+	for (size_t i = 0; i < size; i++) {
+		second.push_back(word->position[i].first);
+	}
+
+	set_union(res.begin(), res.end(), second.begin(), second.end(), back_inserter(destination));
+	res = destination;
+}
 
 
 
