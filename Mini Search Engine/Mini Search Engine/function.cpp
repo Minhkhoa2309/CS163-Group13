@@ -238,6 +238,48 @@ void AndQuery(vector<int>& res, Trie* word) {
 	res = des;
 }
 
+//Search key word
+Trie* KeyWord(Trie* root, string s) {
+	vector<pair<int, int> >res;
+	transform(s.begin(), s.end(), s.begin(), ::tolower);
+	Trie* cur = root;
+
+	int length = s.length();
+	int cnt = 0;
+
+	if (s[cnt] == '#') {
+		if (cur->pNext[36] == NULL)
+			return NULL;
+		cur = cur->pNext[36];
+		cnt++;
+	}
+	else if (s[cnt] == '$') {
+		if (cur->pNext[37] == NULL)
+			return NULL;
+		cur = cur->pNext[37];
+		cnt++;
+	}
+
+	int tmp;
+	while (cnt < length) {
+		if ((int)(s[cnt] - '0') < 10 && (int)(s[cnt] - '0') >= 0)
+			tmp = (int)(s[cnt] - '0') + 26;
+		else if ((int)(s[cnt] - 'a') >= 0 && (int)(s[cnt] - 'a') <= (int)('z' - 'a'))
+			tmp = (int)(s[cnt] - 'a');
+		else {
+			cnt++;
+			continue;
+		}
+
+		if (cur->pNext[tmp] == NULL)
+			return NULL;
+
+		cur = cur->pNext[tmp];
+		cnt++;
+	}
+	return cur;
+}
+
 //Hashtag search
 Trie* hashtag(Trie* root, string str) {
 	//Set all words to lowercase

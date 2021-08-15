@@ -96,9 +96,11 @@ void Load_data(Trie* pHead, string article[]);
 vector<string> input(vector<string>& queryHistory, string& s);
 
 bool checkSpecialCharactor(char s, string tmp); // check special charactors
+
 //Queries
 void IntitleQuery(vector<int>& res, Trie* word);
 void AndQuery(vector<int>& res, Trie* word);
+Trie* KeyWord(Trie* root, string s);
 void queryOr(vector<int>& res, Trie* word);
 Trie* hashtag(Trie* root, string str);
 
