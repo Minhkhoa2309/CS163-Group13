@@ -192,6 +192,32 @@ void IntitleQuery(vector<int>& res, Trie* word)
 }
 
 
+//Or Query
+void queryOr(vector<int>& res, Trie* word) {
+	if (word == NULL)
+		return;
 
+	vector<int> second, destination;
+	size_t size = word->position.size();
 
+	for (size_t i = 0; i < size; i++) {
+		second.push_back(word->position[i].first);
+	}
+
+	set_union(res.begin(), res.end(), second.begin(), second.end(), back_inserter(destination));
+	res = destination;
+}
+
+//And Query
+void AndQuery(vector<int>& res, Trie* word) {
+	if (word == NULL)
+		return;
+	vector<int> second, des;
+	size_t sz = word->position.size();
+	for (size_t i = 0; i < sz; i++) {
+		second.push_back(word->position[i].first);
+	}
+	set_intersection(res.begin(), res.end(), second.begin(), second.end(), back_inserter(des));
+	res = des;
+}
 
