@@ -221,3 +221,35 @@ void AndQuery(vector<int>& res, Trie* word) {
 	res = des;
 }
 
+//Hashtag search
+Trie* hashtag(Trie* root, string str) {
+	//Set all words to lowercase
+	transform(str.begin(), str.end(), str.begin(), ::tolower);
+
+	Trie* current = root;
+	int length, count, tmp;
+
+	length = str.length();
+	count = 1;
+
+	if (current->pNext[36] != NULL)
+		current = current->pNext[36];
+	else
+		return NULL;
+
+	while (count < length) {
+		if ((int)(str[count] - '0') < 10 && (int)(str[count] - '0') >= 0)
+			tmp = (int)(str[count] - '0') + 26;
+		else if ((int)(str[count] - 'a') >= 0 && (int)(str[count] - 'a') <= (int)('z' - 'a'))
+			tmp = (int)(str[count] - 'a');
+		else {
+			return NULL;
+			continue;
+		}
+		if (current->pNext[tmp] == NULL)return NULL;
+		current = current->pNext[tmp];
+		count++;
+	}
+
+	return current;
+}
