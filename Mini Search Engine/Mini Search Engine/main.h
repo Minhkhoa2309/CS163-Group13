@@ -29,16 +29,85 @@ struct History_Trie {
 	History_Trie();
 };
 
+//Template Queue to use data structure unique
+template<class QT>
+struct QNode
+{
+	QT* node;
+	QNode* next;
+	QNode* prev;
+};
+
+template<class QT>
+class Queue
+{
+	QNode<QT>* first;
+	QNode<QT>* last;
+public:
+	Queue() {
+		first = last = nullptr;
+	}
+	bool Empty() {
+		if (first == last && last == nullptr)
+			return true;
+		return false;
+	}
+
+	void Push_back(QT* x) {
+		if (first == nullptr) {
+			first = last = new QNode<QT>;
+			first->node = x;
+			first->next = first->prev = nullptr;
+		}
+		else {
+			last->next = new QNode<QT>;
+			last->next->prev = last;
+			last->next->next = nullptr;
+			last = last->next;
+			last->node = x;
+		}
+	}
+
+	QT* Pop_front() {
+		if (first == last && last == nullptr)
+			return nullptr;
+		else if (first == last) {
+			QT* res = first->node;
+			delete first;
+			first = last = nullptr;
+			return res;
+		}
+		else {
+			QT* res = last->node;
+			QNode<QT>* tmp = last;
+			last = last->prev;
+			delete tmp;
+			last->next = nullptr;
+			return res;
+		}
+	}
+};
+
 void destructor(Trie*& root);
 void destructor_History_Trie(History_Trie* root);
 void insert_word(Trie*& root, bool intitle, string s, int posinart, int article);
 vector<string> ParseStream(string& line, vector<int>& posinart, int& linestart);
 void Load_data(Trie* pHead, string article[]);
-void IntitleQuery(vector<int>& res, Trie* word);
+vector<string> input(vector<string>& queryHistory, string& s);
 
+bool checkSpecialCharactor(char s, string tmp); // check special charactors
 //Queries
+void IntitleQuery(vector<int>& res, Trie* word);
 void AndQuery(vector<int>& res, Trie* word);
 void queryOr(vector<int>& res, Trie* word);
 Trie* hashtag(Trie* root, string str);
+
+//History
+string History_suggestion(History_Trie* history_trie);
+vector<pair<int, int>> searchIncompleteMatch(Trie* root, string s);
+void historyInsert(History_Trie* history_root, string s);
+vector<string> historySearch(History_Trie* history_root, string s);
+void updateHistory(vector<string>& queryHistory, string s);
+
 
 #endif
