@@ -1148,106 +1148,25 @@ void callQuery(vector<string> call, Trie* root, string article[], string search_
 
 string outputFilename(int articleID)
 {
-	string res;
-	if (articleID > 800) {
-		res = "Data";
-		if (articleID < 1000)
-		{
-			res += articleID / 100 + '0';
-			articleID %= 100;
-			res += articleID / 10 + '0';
-			articleID %= 10;
-			res += articleID + '0';
-		}
-		else if (articleID > 1000 && articleID <10000)
-		{
-			res += articleID / 1000 + '0';
-			articleID %= 1000;
-			res += articleID / 100 + '0';
-			articleID %= 100;
-			res += articleID / 10 + '0';
-			articleID %= 10;
-			res += articleID + '0';
-		}
-		else
-		{
-			res += articleID / 10000 + '0';
-			articleID %= 10000;
-			res += articleID / 1000 + '0';
-			articleID %= 1000;
-			res += articleID / 100 + '0';
-			articleID %= 100;
-			res += articleID / 10 + '0';
-			articleID %= 10;
-			res += articleID + '0';
-		}
+	ifstream fin;
+	fin.open("Mini Search Engine/Search Engine-Data/___index.txt");
+	if (!fin)
+	{
+		cout << "file cannot open" << endl;
+		exit(1);
 	}
 	else
 	{
-		res = "Group";
-		if (articleID < 450)
+		vector <string> filename;
+		string res;
+		for (int i = 0; i < 11267; ++i)
 		{
-			res += '0';
-			res += articleID / 50 + 1 + '0';
-			res += "News";
-			articleID = articleID % 50 + 1;
-			res += articleID / 10 + '0';
-			articleID %= 10;
-			res += articleID + '0';
+			fin >> res;
+			filename.push_back(res);
 		}
-		else if (articleID < 550)
-		{
-			res += "10News";
-			articleID = (articleID - 450) + 1;
-			if (articleID == 100)
-				res += "100";
-			else
-			{
-				res += articleID / 10 + '0';
-				articleID %= 10;
-				res += articleID + '0';
-			}
-		}
-		else if (articleID < 600)
-		{
-			res += "11News";
-			articleID = articleID - 550 + 1;
-			res += articleID / 10 + '0';
-			articleID %= 10;
-			res += articleID + '0';
-		}
-		else if (articleID < 650)
-		{
-			res += "12News";
-			articleID = articleID - 600 + 1;
-			res += articleID / 10 + '0';
-			articleID %= 10;
-			res += articleID + '0';
-		}
-		else if (articleID < 700)
-		{
-			res += "13News";
-			articleID = articleID - 650 + 1;
-			res += articleID / 10 + '0';
-			articleID %= 10;
-			res += articleID + '0';
-		}
-		else
-		{
-			res += "14News";
-			articleID = (articleID - 700) + 1;
-			if (articleID == 100)
-				res += "100";
-			else
-			{
-				res += articleID / 10 + '0';
-				articleID %= 10;
-				res += articleID + '0';
-			}
-		}
+		fin.close();
+		return filename[articleID];
 	}
-	res += ".txt";
-	return res;
 }
 
 void output(vector<int>& res, int stime, string article[], string search_string)
@@ -1260,7 +1179,7 @@ void output(vector<int>& res, int stime, string article[], string search_string)
 	for (size_t i = 0; i < sz; i++)
 	{
 		ans = outputFilename(res[i]);
-		//cout << ans << ":" << endl << "	";
+		cout << ans << ":" << endl << "	";
 		tmp = ans + ": ";
 		cnt = 0;
 		while (article[res[i]][cnt] != '\n')
@@ -1270,7 +1189,7 @@ void output(vector<int>& res, int stime, string article[], string search_string)
 				cnt++;
 				continue;
 			}
-			//cout << article[res[i]][cnt];
+			cout << article[res[i]][cnt];
 			tmp += article[res[i]][cnt];
 			cnt++;
 		}

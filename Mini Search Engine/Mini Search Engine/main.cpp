@@ -28,7 +28,35 @@ int main() {
 	cout << "-->'#' query : Search for articles related to Hashtag. Ex: #AI" << endl;
 	cout << "-->'$..$ query: Search for articles related to prices within a range. Ex: Watch 200$..300$" << endl;
 	cout << "-->'*' query : search for articles with that have the specific keyword. Ex: *Bird" << endl;
-	cout << article[1] << endl;
+	
+	system("PAUSE");
+	system("CLS");
+	while (s != "EXIT")
+	{
+		s = History_suggestion(history_root);
+		inputSearch = input(queryHistory, s);
+		if (s == "EXIT")
+		{
+			break;
+		}
+		system("CLS");
+		callQuery(inputSearch, root, article, s);
+		int sz = queryHistory.size();
+		if (sz > 0)cout << "History:" << endl;
+		for (int i = 0; i < sz; i++)
+		{
+			cout << queryHistory[i] << endl;
+		}
+		//system("PAUSE");
+		cout << endl;
+		system("CLS");
+
+	}
+	cout << "Goodbye" << endl;
+	destructor(root);
+	destructor_History_Trie(history_root);
+	cout << endl;
+	return 0;
 	
 
 	/*s = History_suggestion(history_root);
