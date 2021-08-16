@@ -97,6 +97,7 @@ vector<string> input(vector<string>& queryHistory, string& s);
 string outputFilename(int articleID);
 void output(vector<int>& res, int stime, string article[], string search_string);
 bool checkSpecialCharactor(char s, string tmp); // check special charactors
+void removeStopword(string& s);
 
 //Queries
 void IntitleQuery(vector<int>& res, Trie* word);

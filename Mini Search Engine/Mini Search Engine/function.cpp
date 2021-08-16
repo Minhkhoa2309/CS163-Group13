@@ -124,8 +124,7 @@ void Load_data(Trie* pHead, string article[])
 {
 	cout << "Loading data................" << endl;
 	ifstream fin1, fin2;
-	string filename;
-	string line;
+	string filename, line;
 	int i, linestart, cnt;
 	char tmp;
 	vector<char> special = { '.','!','?'};
@@ -163,18 +162,6 @@ void Load_data(Trie* pHead, string article[])
 		{
 			insert_word(pHead, true, word_vector[cnt], position_vector[cnt], index_of_article);
 		}
-		/*while (!fin2.eof()) {
-			getline(fin2, line);
-			//article[i] += line + '\n';
-			word_vector.clear();
-			position_vector.clear();
-			word_vector = ParseStream(line, position_vector, linestart);
-			word_vector_size = word_vector.size();
-			for (cnt = 0; cnt < word_vector_size; cnt++)
-			{
-				insert_word(pHead, false, word_vector[cnt], position_vector[cnt], index_of_article);
-			}
-		}*/
 		fin2.close();
 		i++;
 	}
@@ -561,6 +548,30 @@ vector<int> searchNumberInRange(Trie* root, string s)
 }
 
 //-----------------------------------History Search -------------------------------------------------------
+void removeStopword(string& s)
+{
+	vector<string> stopword;
+	ifstream fin;
+	string tmp;
+	fin.open("stopword.txt");
+	while (!fin.eof())
+	{	
+		getline(fin, tmp);
+		stopword.push_back(tmp);
+	}
+	fin.close();
+	for (int i = 0; i < stopword.size(); i++)
+	{
+		size_t pos = std::string::npos;
+		while ((pos = s.find(stopword[i])) != std::string::npos)
+		{
+			s.erase(pos, stopword[i].length());
+		}
+	}
+}
+
+
+
 vector<string> input(vector<string>& queryHistory, string& s)
 {
 	if (s == "EXIT")return vector<string>();
@@ -568,6 +579,7 @@ vector<string> input(vector<string>& queryHistory, string& s)
 	string tmp;
 	vector<string> result;
 	istringstream iss(s);
+	removeStopword(s);
 	for (string s; iss >> s; )
 	{
 		int i, l = static_cast<int>(s.length());
