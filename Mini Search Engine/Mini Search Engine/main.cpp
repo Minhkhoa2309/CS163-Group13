@@ -28,6 +28,7 @@ int main() {
 	cout << "-->'#' query : Search for articles related to Hashtag. Ex: #AI" << endl;
 	cout << "-->'$..$ query: Search for articles related to prices within a range. Ex: Watch 200$..300$" << endl;
 	cout << "-->'*' query : search for articles with that have the specific keyword. Ex: *Bird" << endl;
+	cout << article[1] << endl;
 	
 
 	/*s = History_suggestion(history_root);

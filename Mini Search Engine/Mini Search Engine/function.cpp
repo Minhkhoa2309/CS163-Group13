@@ -127,6 +127,8 @@ void Load_data(Trie* pHead, string article[])
 	string filename;
 	string line;
 	int i, linestart, cnt;
+	char tmp;
+	vector<char> special = { '.','!','?'};
 	int index_of_article, check, word_vector_size;
 	vector<string> word_vector;
 	vector<int> position_vector;
@@ -144,7 +146,13 @@ void Load_data(Trie* pHead, string article[])
 		{
 			continue;
 		}
-		getline(fin2, line);
+		for (int i = 0; i < special.size(); i++)
+		{
+			getline(fin2, line, special[i]);
+			tmp = special[i];
+			break;
+		}
+		line += tmp;
 		article[i] = line;
 		linestart = 0;
 		word_vector = ParseStream(line, position_vector, linestart);
@@ -155,9 +163,9 @@ void Load_data(Trie* pHead, string article[])
 		{
 			insert_word(pHead, true, word_vector[cnt], position_vector[cnt], index_of_article);
 		}
-		while (!fin2.eof()) {
+		/*while (!fin2.eof()) {
 			getline(fin2, line);
-			article[i] += line + '\n';
+			//article[i] += line + '\n';
 			word_vector.clear();
 			position_vector.clear();
 			word_vector = ParseStream(line, position_vector, linestart);
@@ -166,7 +174,7 @@ void Load_data(Trie* pHead, string article[])
 			{
 				insert_word(pHead, false, word_vector[cnt], position_vector[cnt], index_of_article);
 			}
-		}
+		}*/
 		fin2.close();
 		i++;
 	}
