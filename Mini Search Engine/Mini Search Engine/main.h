@@ -94,6 +94,7 @@ void insert_word(Trie*& root, bool intitle, string s, int posinart, int article)
 vector<string> ParseStream(string& line, vector<int>& posinart, int& linestart);
 void Load_data(Trie* pHead, string article[]);
 vector<string> input(vector<string>& queryHistory, string& s);
+string outputFilename(int articleID);
 //void output(vector<int>& res, int stime, string article[], string search_string);
 bool checkSpecialCharactor(char s, string tmp); // check special charactors
 

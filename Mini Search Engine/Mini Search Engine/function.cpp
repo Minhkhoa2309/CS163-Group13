@@ -1137,3 +1137,95 @@ void callQuery(vector<string> call, Trie* root, string article[], string search_
 		//output(res, stop - start, article, search_string);
 	}
 }
+
+string outputFilename(int articleID)
+{
+	string res;
+	if (articleID > 800) {
+		res = "Data";
+		if (articleID < 1000)
+		{
+			res += articleID / 100 + '0';
+			articleID %= 100;
+			res += articleID / 10 + '0';
+			articleID %= 10;
+			res += articleID + '0';
+		}
+		else
+		{
+			res += articleID / 1000 + '0';
+			articleID %= 1000;
+			res += articleID / 100 + '0';
+			articleID %= 100;
+			res += articleID / 10 + '0';
+			articleID %= 10;
+			res += articleID + '0';
+		}
+	}
+	else
+	{
+		res = "Group";
+		if (articleID < 450)
+		{
+			res += '0';
+			res += articleID / 50 + 1 + '0';
+			res += '_';
+			articleID = articleID % 50 + 1;
+			res += articleID / 10 + '0';
+			articleID %= 10;
+			res += articleID + '0';
+		}
+		else if (articleID < 550)
+		{
+			res += "10_";
+			articleID = (articleID - 450) + 1;
+			if (articleID == 100)
+				res += "100";
+			else
+			{
+				res += articleID / 10 + '0';
+				articleID %= 10;
+				res += articleID + '0';
+			}
+		}
+		else if (articleID < 600)
+		{
+			res += "11-";
+			articleID = articleID - 550 + 1;
+			res += articleID / 10 + '0';
+			articleID %= 10;
+			res += articleID + '0';
+		}
+		else if (articleID < 650)
+		{
+			res += "12_";
+			articleID = articleID - 600 + 1;
+			res += articleID / 10 + '0';
+			articleID %= 10;
+			res += articleID + '0';
+		}
+		else if (articleID < 700)
+		{
+			res += "13_";
+			articleID = articleID - 650 + 1;
+			res += articleID / 10 + '0';
+			articleID %= 10;
+			res += articleID + '0';
+		}
+		else
+		{
+			res += "14_";
+			articleID = (articleID - 700) + 1;
+			if (articleID == 100)
+				res += "100";
+			else
+			{
+				res += articleID / 10 + '0';
+				articleID %= 10;
+				res += articleID + '0';
+			}
+		}
+	}
+	res += ".txt";
+	return res;
+}
