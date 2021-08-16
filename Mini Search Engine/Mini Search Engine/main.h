@@ -119,4 +119,8 @@ void updateHistory(vector<string>& queryHistory, string s);
 //Function to check and execute specific query
 void callQuery(vector<string> call, Trie* root, string article[], string search_string);
 
+//Output
+string outputFilename(int articleID);
+void makeColor(int color);
+
 #endif
