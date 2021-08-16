@@ -102,13 +102,13 @@ bool checkSpecialCharactor(char s, string tmp); // check special charactors
 void IntitleQuery(vector<int>& res, Trie* word);
 void AndQuery(vector<int>& res, Trie* word);
 void queryMinus(vector<int>& res, Trie* word);
-Trie* KeyWord(Trie* root, string s);
 void queryOr(vector<int>& res, Trie* word);
+Trie* KeyWord(Trie* root, string s);
 Trie* hashtag(Trie* root, string str);
 Trie* searchMoney(Trie* root, string s);
 vector<int> searchMoneyInRange(Trie* root, string s);
 vector<int> searchNumberInRange(Trie* root, string s);
-
+vector <int> exactMatch(Trie* root, string s, string article[]);
 //History
 string History_suggestion(History_Trie* history_trie);
 vector<pair<int, int>> searchIncompleteMatch(Trie* root, string s);

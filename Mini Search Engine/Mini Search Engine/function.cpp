@@ -364,9 +364,51 @@ Trie* hashtag(Trie* root, string str) {
 
 	return current;
 }
-
+vector <int> exactMatch(Trie* root, string s, string article[]) {
+	vector <int> null;
+	int length = s.length();
+	int cnt = 0, tmp;
+	Trie* cur = root;
+	int z = (int)('z' - 'a');
+	while (cnt < length) {
+		if ((int)(s[cnt] - '0') <= 9 && (int)(s[cnt] - '0') >= 0) {
+			tmp = (int)(s[cnt] - '0');
+			if (cur->pNext[tmp + 26] == NULL)return null;
+			cur = cur->pNext[tmp + 26];
+		}
+		else {
+			tmp = (int)(s[cnt] - 'a');
+			if (tmp<0 || tmp>(int)('z' - 'a'))break;
+			if (cur->pNext[tmp] == NULL)return null;
+			cur = cur->pNext[tmp];
+		}
+		cnt++;
+	}
+	vector <int> res;
+	int nw = -1;
+	int n = cur->position.size();
+	pair <int, int> ps;
+	for (int i = 0; i < n; i++) {
+		ps = cur->position[i];
+		if (ps.first == nw)continue;
+		cnt = 0;
+		bool ok = true;
+		while (cnt < length) {
+			if (article[ps.first][cnt] != s[cnt]) {
+				ok = false;
+				break;
+			}
+			cnt++;
+		}
+		if (ok) {
+			res.push_back(ps.first);
+			nw = ps.first;
+		}
+	}
+	return res;
+}
 /****************************************************************/
-
+//Money and Number
 Trie* searchMoney(Trie* root, string s)
 {
 	Trie* cur = root;
