@@ -15,7 +15,7 @@ int main() {
 	cout << "After: " << stop - start << "ms" << endl;
 	cout << "Finished Loading!" << endl;
 	cout << "-------------------------------------		------------------------------------     " << endl;
-	cout << "----------------------------------MINI - SEARCH ENGINE!!!!!!---------------------------" << endl;
+	cout << "----------------------------------MINI - SEARCH ENGINE!!!!!!-------------------" << endl;
 	cout << "-------------------------------------		------------------------------------     " << endl;
 	cout << "Query types and guidelines " << endl;
 	cout << "-->AND query : results will only be generated if they have both the key words. Ex: keyword1 AND keyword2 " << endl;
@@ -24,8 +24,8 @@ int main() {
 	cout << "-->'$' query : Search for articles related to prices. Ex: Shoes $39" << endl;
 	cout << "-->'#' query : Search for articles related to Hashtag. Ex: #AI" << endl;
 	cout << "-->'$..$ query: Search for articles related to prices within a range. Ex: Watch 200$..300$" << endl;
+	cout << "-->'-' query: Search for articles not related to this word Ex: -banana" << endl;
 	cout << "-->'*' query : search for articles with that have the specific keyword. Ex: *Bird" << endl;
-
 	cout << "Please read carefully! " << endl;
 
 	
@@ -58,36 +58,4 @@ int main() {
 	cout << endl;
 	return 0;
 
-	
-	system("PAUSE");
-	system("CLS");
-	while (s != "EXIT")
-	{
-		s = History_suggestion(history_root);
-		inputSearch = input(queryHistory, s);
-		if (s == "EXIT")
-		{
-			break;
-		}
-		system("CLS");
-		callQuery(inputSearch, root, article, s);
-		int sz = queryHistory.size();
-		if (sz > 0) cout << "History:" << endl;
-		for (int i = 0; i < sz; i++)
-		{
-			cout << queryHistory[i] << endl;
-		}
-		//system("PAUSE");
-		cout << endl;
-		system("CLS");
-
-	}
-	cout << "Goodbye" << endl;
-	destructor(root);
-	destructor_History_Trie(history_root);
-	cout << endl;
-
-	
-
-	return 0;
 }
