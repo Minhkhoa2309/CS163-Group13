@@ -1151,8 +1151,20 @@ string outputFilename(int articleID)
 			articleID %= 10;
 			res += articleID + '0';
 		}
+		else if (articleID > 1000 && articleID <10000)
+		{
+			res += articleID / 1000 + '0';
+			articleID %= 1000;
+			res += articleID / 100 + '0';
+			articleID %= 100;
+			res += articleID / 10 + '0';
+			articleID %= 10;
+			res += articleID + '0';
+		}
 		else
 		{
+			res += articleID / 10000 + '0';
+			articleID %= 10000;
 			res += articleID / 1000 + '0';
 			articleID %= 1000;
 			res += articleID / 100 + '0';
@@ -1169,7 +1181,7 @@ string outputFilename(int articleID)
 		{
 			res += '0';
 			res += articleID / 50 + 1 + '0';
-			res += '_';
+			res += "News";
 			articleID = articleID % 50 + 1;
 			res += articleID / 10 + '0';
 			articleID %= 10;
@@ -1177,7 +1189,7 @@ string outputFilename(int articleID)
 		}
 		else if (articleID < 550)
 		{
-			res += "10_";
+			res += "10News";
 			articleID = (articleID - 450) + 1;
 			if (articleID == 100)
 				res += "100";
@@ -1190,7 +1202,7 @@ string outputFilename(int articleID)
 		}
 		else if (articleID < 600)
 		{
-			res += "11-";
+			res += "11News";
 			articleID = articleID - 550 + 1;
 			res += articleID / 10 + '0';
 			articleID %= 10;
@@ -1198,7 +1210,7 @@ string outputFilename(int articleID)
 		}
 		else if (articleID < 650)
 		{
-			res += "12_";
+			res += "12News";
 			articleID = articleID - 600 + 1;
 			res += articleID / 10 + '0';
 			articleID %= 10;
@@ -1206,7 +1218,7 @@ string outputFilename(int articleID)
 		}
 		else if (articleID < 700)
 		{
-			res += "13_";
+			res += "13News";
 			articleID = articleID - 650 + 1;
 			res += articleID / 10 + '0';
 			articleID %= 10;
@@ -1214,7 +1226,7 @@ string outputFilename(int articleID)
 		}
 		else
 		{
-			res += "14_";
+			res += "14News";
 			articleID = (articleID - 700) + 1;
 			if (articleID == 100)
 				res += "100";
@@ -1228,4 +1240,88 @@ string outputFilename(int articleID)
 	}
 	res += ".txt";
 	return res;
+}
+
+void output(vector<int>& res, int stime, string article[], string search_string)
+{
+	vector< string > page;
+	string tmp;
+	string ans;
+	size_t sz = res.size(), cnt;
+	cout << search_string << "\n\nFound " << sz << " results in " << stime << " ms\n\n\n";
+	for (size_t i = 0; i < sz; i++)
+	{
+		ans = outputFilename(res[i]);
+		//cout << ans << ":" << endl << "	";
+		tmp = ans + ": ";
+		cnt = 0;
+		while (article[res[i]][cnt] != '\n')
+		{
+			if ((int)article[res[i]][cnt] <= 31 || (int)article[res[i]][cnt] >= 127)
+			{
+				cnt++;
+				continue;
+			}
+			//cout << article[res[i]][cnt];
+			tmp += article[res[i]][cnt];
+			cnt++;
+		}
+		//cout << endl << endl;
+		page.push_back(tmp);
+	}
+	int total = page.size();
+	char ch = '1';
+	int move_page = 0;
+	ostream_iterator< string > screen(cout, "\n\n");
+	if (total < 5) {
+		cout << "[1] - [" << total << "]\n";
+		copy(page.begin(), page.end(), screen);
+		cout << "\n\n";
+		cout << "Press <ENTER> to continue searching...\n";
+	}
+	else {
+		cout << "[1] - [5]\n";
+		copy(page.begin(), page.begin() + 5, screen);
+		cout << "\n\n";
+		cout << "Press <2> to continue next page >>\n\n";
+		cout << "Press <ENTER> to continue searching...\n";
+	}
+	while (ch != 13) {
+		while (true) {
+			ch = _getch();
+			if (ch == '2' && move_page + 5 < total) {
+				move_page += 5;
+				break;
+			}
+			else if (ch == '1' && move_page != 0) {
+				move_page -= 5;
+				break;
+			}
+			else if (ch == 13) {
+				break;
+			}
+			else continue;
+		}
+		if (ch == 13)
+			break;
+		system("CLS");
+		cout << search_string << "\n\nFound " << sz << " results in " << stime << " ms" << "\n\n\n";
+		if (move_page + 5 >= total) {
+			cout << "[" << move_page + 1 << "] - [" << total << "]\n\n";
+			copy(page.begin() + move_page, page.end(), screen);
+			cout << "\n<< Press <1> to continue previous page\n\n";
+		}
+		else if (move_page == 0) {
+			cout << "[1] - [5]\n\n";
+			copy(page.begin() + move_page, page.begin() + move_page + 5, screen);
+			cout << "\nPress <2> to continue next page >>\n\n";
+		}
+		else {
+			cout << "[" << move_page + 1 << "] - [" << move_page + 5 << "]\n\n";
+			copy(page.begin() + move_page, page.begin() + move_page + 5, screen);
+			cout << "\n\n<< Press <1> to continue previous page\t\t||\t\tPress <2> to continue next page >>\n\n";
+		}
+		cout << "Press <ENTER> to continue searching..." << endl;
+	}
+	return;
 }
