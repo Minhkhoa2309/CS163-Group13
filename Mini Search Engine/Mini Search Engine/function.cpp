@@ -120,8 +120,6 @@ void insert_word(Trie*& root, bool intitle, string s, int posinart, int article)
 	return;
 }
 
-
-
 void Load_data(Trie* pHead, string article[])
 {
 	cout << "Loading data................" << endl;
@@ -208,6 +206,50 @@ void IntitleQuery(vector<int>& res, Trie* word)
 	
 }
 
+//Minus query
+void queryMinus(vector<int>& res, Trie* word) {
+	if (word == NULL)
+	{
+		return;
+	}
+	vector<int>tmp;
+
+	int resSize = res.size();
+	int positionSize = word->position.size();
+
+	if (positionSize == 0 || resSize == 0)
+	{
+		return;
+	}
+
+	int i = 0, j = 0;
+	while (i < resSize)
+	{
+		if (j >= positionSize)
+		{
+			for (i = i; i < resSize; i++)
+			{
+				tmp.push_back(res[i]);
+			}
+			break;
+		}
+		if (res[i] == word->position[j].first)
+		{
+			i++;
+		}
+		else if (word->position[j].first < res[i])
+		{
+			j++;
+		}
+		else
+		{
+			tmp.push_back(res[i]);
+			i++;
+		}
+	}
+	res = tmp;
+}
+
 
 //Or Query
 void queryOr(vector<int>& res, Trie* word) {
@@ -230,8 +272,8 @@ void AndQuery(vector<int>& res, Trie* word) {
 	if (word == NULL)
 		return;
 	vector<int> second, des;
-	size_t sz = word->position.size();
-	for (size_t i = 0; i < sz; i++) {
+	size_t size = word->position.size();
+	for (size_t i = 0; i < size; i++) {
 		second.push_back(word->position[i].first);
 	}
 	set_intersection(res.begin(), res.end(), second.begin(), second.end(), back_inserter(des));
@@ -786,4 +828,312 @@ string History_suggestion(History_Trie* history_root) {
 	SetConsoleCursorPosition(h_std_out, coord);
 	historyInsert(history_root, search_string);
 	return search_string;
+}
+
+//Function to check and execute specific query
+void callQuery(vector<string> call, Trie* root, string article[], string search_string) {
+	int callLength, length, tz;
+	bool check;
+	vector<int> destination, second;
+	vector<pair<int, int>> tmp;
+	if (call.size() <= 0) {
+		cout << "Cannot find the result" << endl;
+		return;
+	}
+	vector<int> res;
+	int size;
+	res.clear();
+	Trie* searchReturn; // search return
+	int start, stop;
+	start = clock();
+	int i = 1;
+
+	size = static_cast<int>(call.size());
+	for (i = 0; i < size; i++)
+	{
+		//'AND' STATEMENT
+		if (call[i] == "AND")
+		{
+			i++;
+			//Check if hashtag
+			if (call[i][0] == '#')
+				searchReturn = hashtag(root, call[i]);
+			else if (call[i][0] >= '0' && call[i][0] <= '9')
+			{
+				check = false;
+				callLength = call[i].length();
+				for (int j = 0; j < callLength; j++)
+				{
+					if ((call[i][j] < '0' || call[i][j]>'9') && call[i][j] != '.')
+					{
+						break;
+					}
+					if (call[i][j] == '.')
+					{
+						check = true;
+					}
+				}
+				if (check)
+				{
+					destination.clear();
+					second.clear();
+					second = searchNumberInRange(root, call[i]);
+					set_intersection(res.begin(), res.end(), second.begin(), second.end(), back_inserter(destination));
+					res.clear();
+					res = destination;
+					continue;
+				}
+				else
+					searchReturn = KeyWord(root, call[i]);
+			}
+			//Check if dollarsign
+			else if (call[i][0] == '$')
+			{
+				check = false;
+				callLength = call[i].length();
+				for (int j = 0; j < callLength; j++)
+				{
+					if (call[i][j] == '.')
+					{
+						check = true;
+						break;
+					}
+				}
+				if (check)
+				{
+					destination.clear();
+					second.clear();
+					second = searchMoneyInRange(root, call[i]);
+					if (res.empty())
+					{
+						set_union(res.begin(), res.end(), second.begin(), second.end(), back_inserter(destination));
+						res.clear();
+						res = destination;
+						continue;
+					}
+					set_intersection(res.begin(), res.end(), second.begin(), second.end(), back_inserter(destination));
+					res.clear();
+					res = destination;
+					continue;
+				}
+				searchReturn = searchMoney(root, call[i]);
+			}
+			else
+				searchReturn = KeyWord(root, call[i]);
+			AndQuery(res, searchReturn);
+			continue;
+		}
+		//'OR' STATEMENT
+		if (call[i] == "OR")
+		{
+			if (call[i][0] == '#')
+				searchReturn = hashtag(root, call[i]);
+			else if (call[i][0] >= '0' && call[i][0] <= '9')
+			{
+				check = false;
+				callLength = call[i].length();
+				for (int j = 0; j < callLength; j++)
+				{
+					if ((call[i][j] < '0' || call[i][j]>'9') && call[i][j] != '.')
+					{
+						break;
+					}
+					if (call[i][j] == '.')
+					{
+						check = true;
+					}
+				}
+				if (check)
+				{
+					destination.clear();
+					second.clear();
+					second = searchNumberInRange(root, call[i]);
+					if (res.empty())
+					{
+						set_union(res.begin(), res.end(), second.begin(), second.end(), back_inserter(destination));
+						res.clear();
+						res = destination;
+						continue;
+					}
+					set_intersection(res.begin(), res.end(), second.begin(), second.end(), back_inserter(destination));
+					res.clear();
+					res = destination;
+					continue;
+				}
+				else
+					searchReturn = KeyWord(root, call[i]);
+			}
+			else if (call[i][0] == '$')
+			{
+				check = false;
+				callLength = call[i].length();
+				for (int j = 0; j < callLength; j++)
+				{
+					if (call[i][j] == '.')
+					{
+						check = true;
+						break;
+					}
+				}
+				if (check)
+				{
+					destination.clear();
+					second.clear();
+					second = searchMoneyInRange(root, call[i]);
+					set_union(res.begin(), res.end(), second.begin(), second.end(), back_inserter(destination));
+					res.clear();
+					res = destination;
+					continue;
+				}
+				searchReturn = searchMoney(root, call[i]);
+			}
+			else
+				searchReturn = KeyWord(root, call[i]);
+			queryOr(res, searchReturn);
+			continue;
+		}
+		if (call[i] == "intitle:")
+		{
+			IntitleQuery(res, KeyWord(root, call[++i]));
+			continue;
+		}
+		if (call[i] == "-")
+		{
+			if (i == 0)
+			{
+				queryOr(res, KeyWord(root, call[++i]));
+				continue;
+			}
+			queryMinus(res, KeyWord(root, call[++i]));
+			continue;
+		}
+		if (call[i][0] == '#')
+		{
+			if (res.empty() && i == 0)
+			{
+				queryOr(res, hashtag(root, call[i]));
+				continue;
+			}
+			AndQuery(res, hashtag(root, call[i]));
+			continue;
+		}
+		if (call[i][0] == '$')
+		{
+			check = false;
+			callLength = call[i].length();
+			for (int j = 0; j < callLength; j++)
+			{
+				if (call[i][j] == '.')
+				{
+					check = true;
+					break;
+				}
+			}
+			if (check)
+			{
+				destination.clear();
+				second.clear();
+				second = searchMoneyInRange(root, call[i]);
+				if (!res.empty())
+				{
+					set_intersection(res.begin(), res.end(), second.begin(), second.end(), back_inserter(destination));
+					res = destination;
+				}
+				else res = second;
+				continue;
+			}
+			cout << "query $";
+			if (res.empty() && i == 0)
+			{
+				queryOr(res, searchMoney(root, call[i]));
+				continue;
+			}
+			AndQuery(res, searchMoney(root, call[i]));
+			continue;
+		}
+
+		length = call[i].length();
+		if (call[i][length - 1] == '*')
+		{
+			tmp = searchIncompleteMatch(root, call[i].substr(0, length - 1));
+			second.clear();
+			destination.clear();
+			tz = tmp.size();
+			for (int j = 0; j < tz; j++)
+			{
+				second.push_back(tmp[j].first);
+			}
+			sort(second.begin(), second.end());
+			if (!res.empty())
+			{
+				set_intersection(res.begin(), res.end(), second.begin(), second.end(), back_inserter(destination));
+				res = destination;
+			}
+			else res = second;
+			continue;
+		}
+		if (call[i][0] > '0' && call[i][0] <= '9')
+		{
+			check = false;
+			callLength = call[i].length();
+			for (int j = 0; j < callLength; j++)
+			{
+				if (call[i][j] == '.')
+				{
+					check = true;
+					break;
+				}
+			}
+			if (!check)
+			{
+				queryOr(res, KeyWord(root, call[i]));
+				continue;
+			}
+			destination.clear();
+			second.clear();
+			second = searchNumberInRange(root, call[i]);
+			if (!res.empty())
+			{
+				set_intersection(res.begin(), res.end(), second.begin(), second.end(), back_inserter(destination));
+				res = destination;
+			}
+			else res = second;
+			continue;
+		}
+		else
+		{
+			queryOr(res, KeyWord(root, call[i]));
+			continue;
+		}
+	}
+	stop = clock();
+	if (res.size() <= 0)
+	{
+		cout << search_string << endl;
+		cout << endl;
+		cout << "Cannot find the result" << endl;
+		cout << endl;
+		cout << "Press <ENTER> to continue..." << endl;
+		char ch = 'a';
+		while (ch != 13)
+		{
+			ch = _getch();
+		}
+	}
+	else
+	{
+		//Check duplication
+		vector<int> ans;
+		int l = res.size();
+		if (l == 0)return;
+		sort(res.begin(), res.end());
+		ans.push_back(res[0]);
+		for (int i = 1; i < l; i++) {
+			if (res[i] != res[i - 1])
+				ans.push_back(res[i]);
+		}
+		res = ans;
+
+		//output(res, stop - start, article, search_string);
+	}
 }

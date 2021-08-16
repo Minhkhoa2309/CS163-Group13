@@ -94,12 +94,13 @@ void insert_word(Trie*& root, bool intitle, string s, int posinart, int article)
 vector<string> ParseStream(string& line, vector<int>& posinart, int& linestart);
 void Load_data(Trie* pHead, string article[]);
 vector<string> input(vector<string>& queryHistory, string& s);
-
+//void output(vector<int>& res, int stime, string article[], string search_string);
 bool checkSpecialCharactor(char s, string tmp); // check special charactors
 
 //Queries
 void IntitleQuery(vector<int>& res, Trie* word);
 void AndQuery(vector<int>& res, Trie* word);
+void queryMinus(vector<int>& res, Trie* word);
 Trie* KeyWord(Trie* root, string s);
 void queryOr(vector<int>& res, Trie* word);
 Trie* hashtag(Trie* root, string str);
@@ -114,5 +115,7 @@ void historyInsert(History_Trie* history_root, string s);
 vector<string> historySearch(History_Trie* history_root, string s);
 void updateHistory(vector<string>& queryHistory, string s);
 
+//Function to check and execute specific query
+void callQuery(vector<string> call, Trie* root, string article[], string search_string);
 
 #endif
